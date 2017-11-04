@@ -1,0 +1,24 @@
+{
+  "name": "joimodel",
+  "version": "1.0.0",
+  "description": "Modeling with Joi",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "ava test"
+  },
+  "keywords": [
+    "joi",
+    "model"
+  ],
+  "author": "Charlie Duong",
+  "license": "MIT",
+  "devDependencies": {
+    "ava": "^0.23.0"
+  },
+  "dependencies": {
+    "joi": "^13.0.1"
+  }
+}
