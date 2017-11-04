@@ -1,5 +1,8 @@
 # joi-data-model
 
+[![Build Status](https://travis-ci.org/charlieduong94/joi-data-model.svg?branch=master)](https://travis-ci.org/charlieduong94/joi-data-model)
+[![Coverage Status](https://coveralls.io/repos/github/charlieduong94/joi-data-model/badge.svg?branch=master)](https://coveralls.io/github/charlieduong94/joi-data-model?branch=master)
+
 Simple data modeling that uses [Joi](https://github.com/hapijs/joi) for performing validation.
 
 ### Installation
