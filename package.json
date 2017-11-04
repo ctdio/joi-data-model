@@ -1,5 +1,5 @@
 {
-  "name": "joimodel",
+  "name": "joious",
   "version": "1.0.0",
   "description": "Modeling with Joi",
   "main": "index.js",
@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "ava test"
+    "test": "nyc ava test"
   },
   "keywords": [
     "joi",
@@ -15,8 +15,13 @@
   ],
   "author": "Charlie Duong",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/charlieduong94/joious.git"
+  },
   "devDependencies": {
-    "ava": "^0.23.0"
+    "ava": "^0.23.0",
+    "nyc": "^11.3.0"
   },
   "dependencies": {
     "joi": "^13.0.1"
