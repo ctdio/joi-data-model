@@ -24,8 +24,6 @@ test('should be able to perform simple validation on the model', (t) => {
 test('should allow for validation options to be passed in', (t) => {
   t.plan(1)
 
-  const testString = 'value'
-
   const schema = { name: Joi.string() }
   // allowUnknown is normally false
   const validationOptions = { allowUnknown: true }
@@ -65,8 +63,8 @@ test('should allow for schemas models to be extended', (t) => {
   const TestModel = BaseModel.extend(secondSchema)
 
   t.notThrows(() => new TestModel({
-      name: 'Austin',
-      age: 1234
+    name: 'Austin',
+    age: 1234
   }))
 })
 

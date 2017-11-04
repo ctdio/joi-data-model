@@ -7,6 +7,8 @@
     "test": "test"
   },
   "scripts": {
+    "lint": "standard | snazzy",
+    "pretest": "npm run lint",
     "test": "nyc ava test"
   },
   "keywords": [
@@ -21,7 +23,9 @@
   },
   "devDependencies": {
     "ava": "^0.23.0",
-    "nyc": "^11.3.0"
+    "nyc": "^11.3.0",
+    "snazzy": "^7.0.0",
+    "standard": "^10.0.3"
   },
   "dependencies": {
     "joi": "^13.0.1"
