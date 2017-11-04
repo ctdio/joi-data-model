@@ -92,3 +92,28 @@ test('extended models should receive the base model\'s prototype', (t) => {
 
   t.is(testModel.getString(), baseString)
 })
+
+test('should allow for models with no required attributes to ' +
+'be created with no input', (t) => {
+  t.plan(1)
+  const schema = {
+    name: Joi.string()
+  }
+
+  const Model = define(schema)
+  const model = new Model()
+
+  t.is(model.name, undefined)
+})
+
+test('should NOT allow for models with required attributes to ' +
+'be created with no input', (t) => {
+  t.plan(2)
+  const schema = {
+    name: Joi.string().required()
+  }
+
+  const Model = define(schema)
+  const err = t.throws(() => new Model(), isJoiError)
+  t.true(err.message.includes('"name" is required'))
+})

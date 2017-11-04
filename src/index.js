@@ -27,12 +27,14 @@ function _applyKeySchemaToProto (keySchema, proto, dataProp) {
  * Validates an objected using the schema
  *
  * @param { Object } input - the data to validate
+ * NOTE: input defaults to an empty object to ensure that undefined
+ * input does not pass through validation unchecked
  * @param { JoiSchema } schema - the schema to use for validation
  * @param { JoiValidationOptions } validationOptions - options to apply for when validating
  *
  * @returns { Object } value - the validated data
  */
-function _validateSchema (input, schema, validationOptions) {
+function _validateSchema (input = {}, schema, validationOptions) {
   const { value, error } = Joi.validate(input, schema, validationOptions)
 
   if (error) {
