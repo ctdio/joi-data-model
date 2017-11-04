@@ -1,3 +1,3 @@
 module.exports = function (err) {
-  return err.isJoi
+  return (err instanceof Error) && (err.isJoi)
 }

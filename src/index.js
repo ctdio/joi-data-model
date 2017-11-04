@@ -68,8 +68,10 @@ function define (keySchema, validationOptions) {
      *
      * @returns Model
      */
-    static extend (extendedSchema, validationOptions) {
-      const newSchema = { ...keySchema, ...extendedSchema }
+    static extend (extendedSchema, extendedValidationOptions) {
+      const newSchema = Joi.object()
+        .keys({ ...keySchema, ...extendedSchema })
+      const newValidationOptions = { ...validationOptions, ...extendedValidationOptions }
 
       // new model extends the current model but overrides the validation function
       class NewModel extends this {}
@@ -77,7 +79,7 @@ function define (keySchema, validationOptions) {
       _applyKeySchemaToProto(newSchema, NewModel.prototype, dataProp)
 
       NewModel.prototype[validateProp] = function (input) {
-        return _validateSchema(input, newSchema, validationOptions)
+        return _validateSchema(input, newSchema, newValidationOptions)
       }
 
       return NewModel
@@ -102,6 +104,8 @@ function define (keySchema, validationOptions) {
     /**
      * Return the pure json representation of the model
      * Note: this also allows for the model to be stringified
+     *
+     * TODO: make this return a copy of the data
      *
      * @returns { Object } object - the pure data
      */

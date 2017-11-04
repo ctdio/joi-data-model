@@ -1,9 +1,20 @@
 const test = require('ava')
+const sinon = require('sinon')
 
 const Joi = require('joi')
 const { define } = require('../src/index')
 
 const isJoiError = require('./helpers/isJoiError')
+
+test.beforeEach('create sandbox', (t) => {
+  const sandbox = sinon.sandbox.create()
+  t.context = { sandbox }
+})
+
+test.afterEach((t) => {
+  const { sandbox } = t.context
+  sandbox.restore()
+})
 
 test('should be able to perform simple validation on the model', (t) => {
   t.plan(1)
@@ -53,19 +64,97 @@ test('should throw an error for invalid models', (t) => {
 })
 
 test('should allow for schemas models to be extended', (t) => {
-  t.plan(1)
+  t.plan(4)
+  const { sandbox } = t.context
+  const validateSpy = sandbox.spy(Joi, 'validate')
 
   const schema = { name: Joi.string() }
 
   const BaseModel = define(schema)
+
+  const baseModelInput = { name: 'Elliot' }
+
+  t.notThrows(() => new BaseModel(baseModelInput))
+
+  t.notThrows(() => {
+    sandbox.assert.calledOnce(validateSpy)
+
+    sandbox.assert.calledWith(validateSpy,
+      baseModelInput,
+      Joi.object().keys(schema),
+      undefined)
+  })
+
   const secondSchema = { age: Joi.number() }
+
+  const combinedSchema = Object.assign({}, schema, secondSchema)
 
   const TestModel = BaseModel.extend(secondSchema)
 
-  t.notThrows(() => new TestModel({
-    name: 'Austin',
-    age: 1234
-  }))
+  const testModelInput = {
+    name: 'Mr. Robot',
+    age: 21345
+  }
+
+  t.notThrows(() => new TestModel(testModelInput))
+
+  t.notThrows(() => {
+    sandbox.assert.calledTwice(validateSpy)
+
+    sandbox.assert.calledWith(validateSpy,
+      testModelInput,
+      Joi.object().keys(combinedSchema),
+      {})
+  })
+})
+
+test('should allow for validation options to be extended', (t) => {
+  t.plan(4)
+  const { sandbox } = t.context
+
+  const validateSpy = sandbox.spy(Joi, 'validate')
+
+  const schema = { name: Joi.string() }
+  const joiSchema = Joi.object().keys(schema)
+  const schemaValidationOptions = { abortEarly: false }
+
+  const BaseModel = define(schema, schemaValidationOptions)
+
+  const baseModelInput = { name: 'Arin' }
+
+  t.notThrows(() => new BaseModel(baseModelInput))
+
+  t.notThrows(() => {
+    sandbox.assert.calledOnce(validateSpy)
+
+    sandbox.assert.calledWith(validateSpy,
+      baseModelInput,
+      joiSchema,
+      schemaValidationOptions)
+  })
+
+  const secondSchema = {}
+  const secondSchemaValidationOptions = { convert: false }
+
+  const combinedValidationOptions = Object.assign({},
+    schemaValidationOptions,
+    secondSchemaValidationOptions)
+
+  const TestModel = BaseModel.extend(secondSchema,
+    secondSchemaValidationOptions)
+
+  const testModelInput = { name: 'Austin' }
+
+  t.notThrows(() => new TestModel(testModelInput))
+
+  t.notThrows(() => {
+    sandbox.assert.calledTwice(validateSpy)
+
+    sandbox.assert.calledWith(validateSpy,
+      testModelInput,
+      joiSchema,
+      combinedValidationOptions)
+  })
 })
 
 test('extended models should receive the base model\'s prototype', (t) => {
