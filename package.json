@@ -1,5 +1,5 @@
 {
-  "name": "joious",
+  "name": "joi-data-model",
   "version": "1.0.0",
   "description": "Modeling with Joi",
   "main": "index.js",
@@ -19,7 +19,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/charlieduong94/joious.git"
+    "url": "https://github.com/charlieduong94/joi-data-model.git"
   },
   "devDependencies": {
     "ava": "^0.23.0",
