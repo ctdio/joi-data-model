@@ -1,4 +1,5 @@
 const test = require('ava')
+const sinon = require('sinon')
 
 const Joi = require('joi')
 const { define } = require('../src/index')
@@ -13,15 +14,24 @@ const schema = {
   age: Joi.number()
 }
 
-const TestModel = define(schema)
+const validationOptions = { abortEarly: true }
+
+const TestModel = define(schema, validationOptions)
 
 test.beforeEach((t) => {
+  const sandbox = sinon.sandbox.create()
+
   const testModel = new TestModel({
     name: testName,
     age: testAge
   })
 
-  t.context = { testModel }
+  t.context = { testModel, sandbox }
+})
+
+test.afterEach((t) => {
+  const { sandbox } = t.context
+  sandbox.restore()
 })
 
 test('should allow for data on the schema to be retrieved from the model', (t) => {
@@ -78,4 +88,24 @@ test('#toJSON should return a pure json clone of the model', (t) => {
 
   t.not(json.name, testModel.name)
   t.is(Object.getPrototypeOf(json), Object.prototype)
+})
+
+test('#Model.validate should perform plain joi validation on the ' +
+'object with the given ', (t) => {
+  const { sandbox } = t.context
+  const validateSpy = sandbox.spy(Joi, 'validate')
+
+  const input = { name: 'string', age: 123 }
+
+  const data = TestModel.validate(input)
+
+  t.deepEqual(data, input)
+
+  t.notThrows(() => {
+    sandbox.assert.calledOnce(validateSpy)
+    sandbox.assert.calledWith(validateSpy,
+      input,
+      Joi.object().keys(schema),
+      validationOptions)
+  })
 })

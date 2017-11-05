@@ -67,7 +67,7 @@ function define (keySchema, validationOptions) {
      * @param { KeySchema } extendedSchema - the schema apply over the original schema
      * @param { JoiValidationOptions } validationOptions - joi schema validation options
      *
-     * @returns Model
+     * @returns { Model }
      */
     static extend (extendedSchema, extendedValidationOptions) {
       const newSchema = Joi.object()
@@ -84,6 +84,17 @@ function define (keySchema, validationOptions) {
       }
 
       return NewModel
+    }
+
+    /**
+     * Plain vanilla joi schema validation
+     *
+     * @param { Object } input - the object to validate
+     *
+     * @returns { Object } data - the validated data
+     */
+    static validate (input) {
+      return _validateSchema(input, schema, validationOptions)
     }
 
     /**

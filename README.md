@@ -169,9 +169,26 @@ To get a pure javascript object clone of the data stored within
 the model, you can call the instance's `toJSON` function.
 
 ```js
-const pureCarObject = car.toJSON()
-console.log(Object.getPrototypeOf(pureCarObject) === Object.prototype) // true
+const object = car.toJSON()
+console.log(Object.getPrototypeOf(object) === Object.prototype) // true
 ```
+
+#### Performing simple validation
+
+Don't need a model instance? Models provide a static `validate` method that
+performs validation using the schema and validation options used when defining the model.
+
+##### `Model.validate(input)`
+
+```js
+const personSchema = { name: Joi.string() }
+const options = { abortEarly: false }
+const Model = joiDataModel.define(personSchema, options)
+
+const validatedData = Model.validate({ name: 'string' }) // not a model instance
+```
+
+This is the equivalent of calling `Joi.validate(input, schema, validationOptions)`.
 
 ### Extending models
 
@@ -192,7 +209,9 @@ const model = new BaseModel({ name: 'some name' })
 console.log(model.stringify()) // prints '{"name":"some name"}'
 ```
 
-The schema can be extended/overridden by using `Model.extend`.
+The schema can be extended/overridden by using the static `extend` method.
+
+##### `Model.extend(schema [, validationOptions ])`
 
 ```js
 const ageSchema = { age: Joi.number() }
