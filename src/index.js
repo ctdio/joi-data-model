@@ -1,4 +1,5 @@
 const Joi = require('joi')
+const clone = require('clone')
 
 /**
  * Applies properties for the keys in the schema
@@ -105,12 +106,10 @@ function define (keySchema, validationOptions) {
      * Return the pure json representation of the model
      * Note: this also allows for the model to be stringified
      *
-     * TODO: make this return a copy of the data
-     *
      * @returns { Object } object - the pure data
      */
     toJSON () {
-      return this[dataProp]
+      return clone(this[dataProp])
     }
   }
 

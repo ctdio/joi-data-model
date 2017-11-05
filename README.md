@@ -159,7 +159,21 @@ car.year = 'not a valid year'
 // ^^^ throws a validation error
 ```
 
-#### Extending models
+**Important Note**: Setting values nested deep within the model
+(Ex. `modelInstance.value.nestedValue = 'blah'`), bypasses validation.
+Setters are only defined for properties on the surface of the model.
+If models need to be mutated, be sure to either tread carefully
+or keep schemas definitions relatively flat.
+
+To get a pure javascript object clone of the data stored within
+the model, you can call the instance's `toJSON` function.
+
+```js
+const pureCarObject = car.toJSON()
+console.log(Object.getPrototypeOf(pureCarObject) === Object.prototype) // true
+```
+
+### Extending models
 
 Since a Model is just a Class, it is easy to extend functionality.
 

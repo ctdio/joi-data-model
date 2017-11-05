@@ -66,3 +66,16 @@ test('#toJSON should return a pure json representation of the model', (t) => {
 
   t.deepEqual(json, { name: testName, age: testAge })
 })
+
+test('#toJSON should return a pure json clone of the model', (t) => {
+  t.plan(3)
+  const { testModel } = t.context
+  const json = testModel.toJSON()
+
+  t.deepEqual(json, { name: testName, age: testAge })
+
+  json.name = 1234
+
+  t.not(json.name, testModel.name)
+  t.is(Object.getPrototypeOf(json), Object.prototype)
+})
