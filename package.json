@@ -2,7 +2,7 @@
   "name": "joi-data-model",
   "version": "1.2.0",
   "description": "Modeling with Joi",
-  "main": "index.js",
+  "main": "src/index.js",
   "directories": {
     "test": "test"
   },
